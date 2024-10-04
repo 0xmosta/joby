@@ -1,5 +1,3 @@
-import Image from "next/image"
-import localFont from "next/font/local"
 import { usePrivy } from '@privy-io/react-auth'
 import { Button } from "@/components/ui/button"
 
