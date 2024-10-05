@@ -96,7 +96,7 @@ export const Hire = () => {
               className="snap-start h-[calc(100vh-4rem)] flex items-center justify-center p-4"
               ref={index === currentIndex ? cardRef : null}
             >
-              <Link href={`/${dev.address}`} passHref>
+              <Link href={`/p/${dev.address}`} passHref>
                 <Card className="w-full max-w-sm cursor-pointer transition-transform duration-200 hover:scale-105">
                   <CardHeader className="text-center pb-2">
                     <div className="flex justify-center mb-4">
