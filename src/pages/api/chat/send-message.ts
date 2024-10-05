@@ -1,182 +1,102 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { verifyProof } from "@semaphore-protocol/core"
-import { getGroup } from "@/lib/bandadaUtils"
+import { generateProof, Group, Identity, verifyProof } from "@semaphore-protocol/core"
+import { getGroup, getMembersGroup } from "@/lib/bandadaUtils"
 import clientPromise from "@/lib/mongodb"
+import { verifyToken } from "@/lib/cookies"
+import { privyClient } from "@/lib/privyclient"
+import { encodeBytes32String, toBigInt } from "ethers"
 
-// export default async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse
-// ) {
-//   let errorLog = ""
+const BANDADA_GROUP_ID = '10085507080601042084914096287011'
 
-//   // Check if the environment variable for group ID is defined.
-//   if (typeof process.env.NEXT_PUBLIC_BANDADA_GROUP_ID !== "string") {
-//     throw new Error(
-//       "Please, define NEXT_PUBLIC_BANDADA_GROUP_ID in your .env.development.local or .env.production.local file"
-//     )
-//   }
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
 
-//   // Retrieve the group ID from the environment variables.
-//   const groupId = process.env.NEXT_PUBLIC_BANDADA_GROUP_ID!
+  let errorLog = ""
 
-//   // Extract feedback, merkleTreeRoot, nullifierHash, and proof from the request body.
-//   const { merkleTreeDepth, feedback, merkleTreeRoot, nullifierHash, points } =
-//     req.body
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' })
+  }
 
-//   try {
-//     // Get the group details based on the group ID.
-//     const group = await getGroup(groupId)
+  // Extract feedback, merkleTreeRoot, nullifierHash, and proof from the request body.
+  const { messageToSend } = req.body
 
-//     // Check if the group exists
-//     if (!group) {
-//       errorLog = "This group does not exist"
-//       console.error(errorLog)
-//       res.status(500).send(errorLog)
-//       return
-//     }
-//     const client = await clientPromise
-//     const db = client.db('hackathon')
-//     const collection = db.collection('root_history')
-//     // Fetch the current merkle root from the database
+  const userData = await verifyToken(req)
+  const user = await privyClient.getUserById(userData.userId)
+  const identityPK = user.customMetadata.identity as string
+  if (!identityPK) {
+    return res.status(401).json({ message: 'User identity not found' })
+  }
+  const identity = new Identity(identityPK)
 
-//     const currentMerkleRoot = await collection.find({}).sort({ created_at: -1 }).limit(1).toArray()
+  const users = await getMembersGroup(BANDADA_GROUP_ID)
 
-//     // Check if current merkle root exists.
-//     if (!currentMerkleRoot) {
-//       errorLog = "Wrong currentMerkleRoot"
-//       console.error(errorLog)
-//       res.status(500).send(errorLog)
-//       return
-//     }
+  if (!users) {
+    return res.status(401).json({ message: 'Users not found' })
+  }
 
-//     // Compare merkle tree roots.
-//     if (merkleTreeRoot !== currentMerkleRoot[0].root) {
-//       // Compare merkle tree roots and validate duration.
-//       const { data: dataMerkleTreeRoot, error: errorMerkleTreeRoot } =
-//         await supabase.from("root_history").select().eq("root", merkleTreeRoot)
+  const semaphoreGroup = new Group(users)
 
-//       if (errorMerkleTreeRoot) {
-//         console.log(errorMerkleTreeRoot)
-//         res.status(500).end()
-//         return
-//       }
+  if (!semaphoreGroup) {
+    throw new Error("Group not found")
+  }
 
-//       // Fetch nullifier from the database.
-//       if (!dataMerkleTreeRoot) {
-//         errorLog = "Wrong dataMerkleTreeRoot"
-//         console.error(errorLog)
-//         res.status(500).send(errorLog)
-//         return
-//       }
+  const message = toBigInt(encodeBytes32String(messageToSend)).toString()
 
-//       if (dataMerkleTreeRoot.length === 0) {
-//         errorLog = "Merkle Root is not part of the group"
-//         console.log(errorLog)
-//         res.status(500).send(errorLog)
-//         return
-//       }
+  const { points, merkleTreeDepth, merkleTreeRoot, message: feedback, nullifier: nullifierHash } = await generateProof(
+    identity!,
+    semaphoreGroup,
+    message,
+    BANDADA_GROUP_ID
+  )
 
-//       console.log("dataMerkleTreeRoot", dataMerkleTreeRoot)
+  try {
+    const group = await getGroup(BANDADA_GROUP_ID)
 
-//       const merkleTreeRootDuration = group.fingerprintDuration
+    //* Get current merkel root 
+    const client = await clientPromise
+    const db = client.db('hackathon')
+    const currentMerkleRoot = await db.collection('rootHistory').findOne({})
 
-//       if (
-//         dataMerkleTreeRoot &&
-//         Date.now() >
-//           Date.parse(dataMerkleTreeRoot[0].created_at) + merkleTreeRootDuration
-//       ) {
-//         errorLog = "Merkle Tree Root is expired"
-//         console.log(errorLog)
-//         res.status(500).send(errorLog)
-//         return
-//       }
-//     }
+    if (!currentMerkleRoot) {
+      throw new Error("Current root not found")
+    }
+    // const currentMerkleRoot = await db.collection("rootHistory")
+    //   .find()
+    //   .sort({ createdAt: -1 })
+    //   .limit(1)
+    //   .toArray()
 
-//     const { data: nullifier, error: errorNullifierHash } = await supabase
-//       .from("nullifier_hash")
-//       .select("nullifier")
-//       .eq("nullifier", nullifierHash)
+    console.log("PARAMS")
+    console.log("merkleTreeDepth", merkleTreeDepth)
+    console.log("merkleTreeRoot", merkleTreeRoot)
+    console.log("feedback", feedback)
+    console.log("nullifierHash", nullifierHash)
+    console.log("points", points)
 
-//     // Handle error if occurred during fetching nullifier.
-//     if (errorNullifierHash) {
-//       console.log(errorNullifierHash)
-//       res.status(500).end()
-//       return
-//     }
 
-//     // Check if nullifier is valid.
-//     if (!nullifier) {
-//       errorLog = "Wrong nullifier"
-//       console.log(errorLog)
-//       res.status(500).send(errorLog)
-//       return
-//     }
+    const isVerified = await verifyProof({
+      merkleTreeDepth,
+      merkleTreeRoot,
+      message: feedback,
+      nullifier: nullifierHash,
+      scope: BANDADA_GROUP_ID,
+      points
+    })
 
-//     // Check for duplicate nullifier usage.
-//     if (nullifier.length > 0) {
-//       errorLog = "You are using the same nullifier twice"
-//       console.log(errorLog)
-//       res.status(500).send(errorLog)
-//       return
-//     }
+    if (!isVerified) {
+      const errorLog = "The proof was not verified successfully"
+      console.error(errorLog)
+      res.status(500).send(errorLog)
+      return
+    }
 
-//     // Verify the proof using Semaphore protocol.
-//     const isVerified = await verifyProof({
-//       merkleTreeDepth,
-//       merkleTreeRoot,
-//       message: feedback,
-//       nullifier: nullifierHash,
-//       scope: groupId,
-//       points
-//     })
+    const feedbackCollection = db.collection('feedback')
+    await feedbackCollection.insertOne({ message: feedback, createdAt: new Date() })
+    return res.status(200).json({ message: 'Success' })
 
-//     // Handle unverified proof.
-//     if (!isVerified) {
-//       const errorLog = "The proof was not verified successfully"
-//       console.error(errorLog)
-//       res.status(500).send(errorLog)
-//       return
-//     }
-
-//     // Insert nullifier into the database.
-//     const { error: errorNullifier } = await supabase
-//       .from("nullifier_hash")
-//       .insert([{ nullifier: nullifierHash }])
-
-//     // Handle error if occurred during inserting nullifier.
-//     if (errorNullifier) {
-//       console.error(errorNullifier)
-//       res.status(500).end()
-//       return
-//     }
-
-//     // Insert feedback into the database.
-//     const { data: dataFeedback, error: errorFeedback } = await supabase
-//       .from("feedback")
-//       .insert([{ message: feedback }])
-//       .select()
-//       .order("created_at", { ascending: false })
-
-//     // Handle error if occurred during inserting feedback.
-//     if (errorFeedback) {
-//       console.error(errorFeedback)
-//       res.status(500).end()
-//       return
-//     }
-
-//     // Check if feedback data is valid.
-//     if (!dataFeedback) {
-//       const errorLog = "Wrong dataFeedback"
-//       console.error(errorLog)
-//       res.status(500).send(errorLog)
-//       return
-//     }
-
-//     // Return the inserted feedback data
-//     res.status(200).send(dataFeedback)
-//   } catch (error) {
-//     // Handle any errors that occur during the process
-//     console.error(error)
-//     res.status(500).end()
-//   }
-// }
+  } catch (error) {
+    console.error(`error`, error)
+  }
+}

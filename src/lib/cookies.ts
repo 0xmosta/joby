@@ -13,5 +13,4 @@ export const verifyToken = async (req: NextApiRequest): Promise<AuthTokenClaims>
   } catch (error) {
     throw new Error('Invalid token')
   }
-  
 }

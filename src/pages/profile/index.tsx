@@ -14,12 +14,12 @@ import DashboardLayout from '@/components/Dashboard'
 import useUserStore from '@/hooks/useUserStore'
 import Avatar, { genConfig } from 'react-nice-avatar'
 import Image from 'next/image'
+import { Identity } from '@semaphore-protocol/core'
 
 export default function UserProfilePage() {
   const { user } = usePrivy()
   const [email, setEmail] = useState<string>('test@example.com')
   const [bio, setBio] = useState("I'm a software developer passionate about creating user-friendly applications.")
-
   return (
     <DashboardLayout>
       <div className="flex flex-col bg-white w-full h-screen py-20 items-center gap-2 p-2">
