@@ -102,7 +102,7 @@ export default function ChatPage() {
     <DashboardLayout>
       <div className="flex h-screen pt-16 bg-gray-900 text-white">
         {/* Sidebar */}
-        <div className={`bg-gray-800 w-full sm:w-64 fixed inset-y-0 left-0 transform ${showSidebar ? 'translate-x-0' : '-translate-x-full'} sm:relative sm:translate-x-0 transition duration-200 ease-in-out z-10`}>
+        <div className={`bg-gray-800 w-full sm:w-64 fixed inset-y-0 left-0 transform ${showSidebar ? 'translate-x-0' : '-translate-x-full'} sm:relative sm:translate-x-0 transition duration-200 ease-in-out`}>
           <div className="p-4 border-b border-gray-700">
             <h2 className="text-2xl font-semibold text-primary">Chats</h2>
           </div>
