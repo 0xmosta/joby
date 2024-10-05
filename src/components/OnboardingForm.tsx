@@ -22,7 +22,7 @@ export default function CardSelectionPage() {
             <CardDescription>Select this option if you are looking for a job</CardDescription>
           </CardHeader>
           <CardContent>
-            <p>Click here to learn more about Option 1 and its features.</p>
+            <p>Your github will be rated then you could proceed to you profile.</p>
           </CardContent>
         </Card>
 
@@ -35,7 +35,7 @@ export default function CardSelectionPage() {
             <CardDescription>Select this option if you looking for developers</CardDescription>
           </CardHeader>
           <CardContent>
-            <p>Click here to find out about Option 2 and what it offers.</p>
+            <p>You will be able to find developers fit for your need.</p>
           </CardContent>
         </Card>
       </div>
