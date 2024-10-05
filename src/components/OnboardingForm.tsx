@@ -28,7 +28,7 @@ export default function CardSelectionPage() {
 
         <Card 
           className="cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1"
-          onClick={() => handleCardClick('/option2')}
+          onClick={() => handleCardClick('/customer_registration')}
         >
           <CardHeader>
             <CardTitle>Customer</CardTitle>
