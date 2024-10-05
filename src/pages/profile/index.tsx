@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -31,8 +31,8 @@ export default function UserProfilePage() {
                 <AvatarFallback>{name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
               </Avatar>
               <div>
-                <CardTitle className="text-2xl">{name}</CardTitle>
-                <CardDescription>{email}</CardDescription>
+                <CardTitle className="text-2xl">{user?.github?.username}</CardTitle>
+                <CardDescription>{user?.wallet?.address}</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -40,7 +40,7 @@ export default function UserProfilePage() {
             <Tabs defaultValue="personal" className="w-full">
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="personal"><User className="mr-2 h-4 w-4" /> Personal</TabsTrigger>
-                <TabsTrigger value="account"><Key className="mr-2 h-4 w-4" /> Account</TabsTrigger>
+                <TabsTrigger value="account"><Key className="mr-2 h-4 w-4" /> Wallet</TabsTrigger>
                 <TabsTrigger value="notifications"><Bell className="mr-2 h-4 w-4" /> Notifications</TabsTrigger>
                 <TabsTrigger value="privacy"><Shield className="mr-2 h-4 w-4" /> Privacy</TabsTrigger>
               </TabsList>

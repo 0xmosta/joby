@@ -19,7 +19,7 @@ export default function JobyLanding() {
     if (ready && authenticated) {
       console.log('authenticated')
       if (user?.github?.name) {
-        useUserStore.setState({ username: user.github.name })
+        useUserStore.setState({ username: user.github.username })
       }
       router.push('/onboarding')
 
@@ -29,7 +29,7 @@ export default function JobyLanding() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="px-4 lg:px-6 h-14 flex items-center justify-between max-w-7xl mx-auto w-full">
-        <Link className="flex items-center justify-center" href="#">
+        <Link className="flex items-center justify-center" href="/">
           <span className="sr-only">Joby</span>
           <Image src={'/JobyLogo2.png'} alt="Joby Logo" width={60} height={60} />
         </Link>
