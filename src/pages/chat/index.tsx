@@ -124,3 +124,5 @@ export const Chat = () => {
     </DashboardLayout>
   )
 }
+
+export default Chat
