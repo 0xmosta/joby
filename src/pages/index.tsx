@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import useUserStore from "@/hooks/useUserStore"
 import { usePrivy } from "@privy-io/react-auth"
 import { EyeOff, Search, Shield } from "lucide-react"
 import Image from "next/image"
@@ -9,7 +10,7 @@ import { useEffect } from "react"
 
 export default function JobyLanding() {
   const router = useRouter()
-  const { login, authenticated, ready } = usePrivy()
+  const { login, authenticated, ready, user } = usePrivy()
   const onClickLogin = () => {
     login({ loginMethods: ['github', 'wallet'] })
   }
@@ -17,10 +18,14 @@ export default function JobyLanding() {
   useEffect(() => {
     if (ready && authenticated) {
       console.log('authenticated')
+      if (user?.github?.name) {
+        useUserStore.setState({ username: user.github.name })
+      }
       router.push('/onboarding')
+
     }
   }, [authenticated])
-  
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="px-4 lg:px-6 h-14 flex items-center justify-between max-w-7xl mx-auto w-full">

@@ -5,8 +5,10 @@ import { motion } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from './ui/button'
+import { useRouter } from 'next/router'
 
 export default function OnboardDev1() {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
   const [showDescription, setShowDescription] = useState(false)
 
@@ -74,7 +76,9 @@ export default function OnboardDev1() {
         </CardContent>
       </Card>
 
-      <Button className='w-full max-w-md'>Next</Button>
+      <Button onClick={() => {
+        router.push('/profile')
+      }} disabled={isLoading} className='w-full max-w-md'>Next</Button>
     </div>
   )
 }
