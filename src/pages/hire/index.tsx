@@ -20,7 +20,7 @@ export const Hire = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [developers, setDevelopers] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
   const cardRef = useRef(null)
 
   useEffect(() => {
@@ -116,7 +116,7 @@ export const Hire = () => {
         )}
 
         <div className="mt-16 snap-y snap-mandatory overflow-y-scroll h-[calc(100vh-4rem)]">
-          {developers.map((dev, index) => (
+          {developers.map((dev: { address: string; bio: string }, index) => (
             <div
               key={dev.address}
               className="snap-start h-[calc(100vh-4rem)] flex items-center justify-center p-4"
@@ -135,8 +135,7 @@ export const Hire = () => {
                 </Card>
               </Link>
             </div>
-          ))}
-        </div>
+          ))}        </div>
       </div>
     </DashboardLayout>
   )

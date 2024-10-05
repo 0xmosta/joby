@@ -14,9 +14,9 @@ const BACKEND_URL = "https://joby-backend.fly.dev"
 
 export default function UserProfilePage() {
   const { user } = usePrivy()
-  const [developer, setDeveloper] = useState(null)
+  const [developer, setDeveloper] = useState<{ bio?: string } | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (user?.wallet?.address) {
@@ -24,7 +24,7 @@ export default function UserProfilePage() {
     }
   }, [user])
 
-  const fetchDeveloper = async (address) => {
+  const fetchDeveloper = async (address: string) => {
     try {
       setIsLoading(true)
       const response = await axios.get(`${BACKEND_URL}/developers/${address}`)
