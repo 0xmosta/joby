@@ -57,7 +57,10 @@ export default async function handler(
       root: groupRoot.toString()
     })
 
-    const otherUser = await privyClient.getUserById(personToContact)
+    const otherUser = await privyClient.getUserByWalletAddress(personToContact)
+    if (!otherUser) {
+      return res.status(401).json({ message: 'otherUser not found' })
+    }
     const otherIdentityPK = otherUser.customMetadata.identity as string
     if (!otherIdentityPK) {
       return res.status(401).json({ message: 'otherUser identity not found' })

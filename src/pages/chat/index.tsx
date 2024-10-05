@@ -68,6 +68,8 @@ export default function ChatPage() {
   }
 
   useEffect(() => {
+    let intervalId: NodeJS.Timeout
+    
     const fetchMessage = async () => {
       if (selectedChat) {
         try {
@@ -88,7 +90,12 @@ export default function ChatPage() {
         }
       }
     }
-    fetchMessage()
+
+    if (selectedChat) {
+      fetchMessage(); // Fetch messages immediately when a chat is selected
+      intervalId = setInterval(fetchMessage, 1000); // Then fetch every second
+    }
+  
   }, [selectedChat])
 
   return (

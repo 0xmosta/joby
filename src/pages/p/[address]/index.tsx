@@ -149,7 +149,7 @@ const DeveloperDetailPage = () => {
         body: JSON.stringify({
           name: address,
           description: 'chat with a potential hire',
-          personToContact: 'did:privy:cm1whutm00504114f06sfb7fh',
+          personToContact: address,
         })
       })
 

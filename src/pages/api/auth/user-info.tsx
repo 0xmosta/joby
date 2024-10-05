@@ -23,7 +23,6 @@ export default async function handler(
       identity
     })
     return res.status(200).json({ message: 'User Info' })
-
   } catch (error) {
     console.log(error)
     return res.status(401).json({ message: 'Unauthorized' })
