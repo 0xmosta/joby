@@ -182,7 +182,7 @@ const DeveloperDetailPage = () => {
   return (
     <DashboardLayout>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 p-4 sm:p-6">
-        <Card className="w-full max-w-xl shadow-lg bg-gray-800 border-gray-700">
+        <Card className="w-full max-w-xl shadow-lg bg-gray-800 border-gray-700 mt-16">
           <CardHeader className="flex flex-col items-center p-6 bg-gradient-to-r from-blue-600 to-purple-700 text-white rounded-t-lg">
             <div className="relative mb-4">
               {address && typeof address === 'string' && (
