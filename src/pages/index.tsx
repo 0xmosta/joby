@@ -11,7 +11,7 @@ export default function JobyLanding() {
   const router = useRouter()
   const { login, authenticated, ready, user } = usePrivy()
   const onClickLogin = () => {
-    login({ loginMethods: ['github', 'wallet'] })
+    login({ loginMethods: ['github', 'wallet', 'email', 'google'] })
   }
 
   const setUserInfo = async () => {
