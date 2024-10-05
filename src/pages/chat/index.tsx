@@ -26,22 +26,6 @@ type Message = {
   timestamp: string
 }
 
-// Placeholder data for chats
-const chats = [
-  { id: 1, name: "Alice Smith", lastMessage: "Hey, how are you?", timestamp: "10:30 AM" },
-  { id: 2, name: "Bob Johnson", lastMessage: "Can we meet tomorrow?", timestamp: "Yesterday" },
-  { id: 3, name: "Charlie Brown", lastMessage: "Thanks for your help!", timestamp: "2 days ago" },
-  { id: 4, name: "Diana Ross", lastMessage: "Let's discuss the project", timestamp: "3 days ago" },
-]
-
-// Placeholder data for messages
-// const messages = [
-//   { id: 1, sender: "Alice Smith", content: "Hey, how are you?", timestamp: "10:30 AM" },
-//   { id: 2, sender: "You", content: "I'm good, thanks! How about you?", timestamp: "10:31 AM" },
-//   { id: 3, sender: "Alice Smith", content: "I'm doing well too. Did you finish the report?", timestamp: "10:32 AM" },
-//   { id: 4, sender: "You", content: "Yes, I just sent it over. Let me know if you need any changes.", timestamp: "10:33 AM" },
-// ]
-
 export default function ChatPage() {
   const { user } = usePrivy()
   const [chatList, setChatList] = useState<Chat[]>([])
@@ -51,7 +35,6 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<any[]>([])
 
   useEffect(() => {
-
     const fetchChatList = async () => {
       try {
         const response = await fetch("api/chat/list", {
@@ -65,7 +48,6 @@ export default function ChatPage() {
       }
     }
     fetchChatList()
-
   }, [])
 
   const sendMessage = async (message: string) => {
@@ -86,7 +68,6 @@ export default function ChatPage() {
   }
 
   useEffect(() => {
-
     const fetchMessage = async () => {
       if (selectedChat) {
         try {
@@ -101,44 +82,39 @@ export default function ChatPage() {
             timestamp: message.timestamp,
           }))
           setMessages(messagesArray)
-
           console.log(messagesArray);
         } catch (error) {
           console.error(`error`, error)
         }
       }
     }
-
     fetchMessage()
   }, [selectedChat])
 
-
   return (
     <DashboardLayout>
-      <div className="flex h-screen pt-16 bg-white">
+      <div className="flex h-screen pt-16 bg-gray-900 text-white">
         {/* Sidebar */}
-        <div className={`bg-white w-full sm:w-64 fixed inset-y-0 left-0 transform ${showSidebar ? 'translate-x-0' : '-translate-x-full'} sm:relative sm:translate-x-0 transition duration-200 ease-in-out z-10`}>
-          <div className="p-4 border-b">
+        <div className={`bg-gray-800 w-full sm:w-64 fixed inset-y-0 left-0 transform ${showSidebar ? 'translate-x-0' : '-translate-x-full'} sm:relative sm:translate-x-0 transition duration-200 ease-in-out z-10`}>
+          <div className="p-4 border-b border-gray-700">
             <h2 className="text-2xl font-semibold text-primary">Chats</h2>
           </div>
           <ScrollArea className="h-[calc(100vh-5rem)]">
             {chatList.map((chat) => (
               <div
                 key={chat.id}
-                className={`p-4 cursor-pointer hover:bg-gray-100 ${selectedChat?.id === chat.id ? 'bg-gray-100' : ''}`}
+                className={`p-4 cursor-pointer hover:bg-gray-700 ${selectedChat?.id === chat.id ? 'bg-gray-700' : ''}`}
                 onClick={() => {
                   setSelectedChat(chat)
                   setShowSidebar(false)
                 }}
               >
                 <div className="flex items-center space-x-4">
-
                   <Avatar style={{ width: '40px', height: '40px' }} {...genConfig(chat.name)} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{chat.name}</p>
-                    <p className="text-sm text-gray-500 truncate">{chat.description}</p>
+                    <p className="text-sm font-medium text-gray-100 truncate">{chat.name}</p>
+                    <p className="text-sm text-gray-400 truncate">{chat.description}</p>
                   </div>
-                  {/* <span className="text-xs text-gray-400">{chat.timestamp}</span> */}
                 </div>
               </div>
             ))}
@@ -146,9 +122,9 @@ export default function ChatPage() {
         </div>
 
         {/* Main content */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col bg-gray-900">
           {/* Chat header */}
-          <div className="bg-white border-b p-4 flex items-center justify-between">
+          <div className="bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
             <Button variant="ghost" size="icon" className="sm:hidden text-primary" onClick={() => setShowSidebar(!showSidebar)}>
               <Menu className="h-6 w-6" />
             </Button>
@@ -159,15 +135,15 @@ export default function ChatPage() {
           <ScrollArea className="flex-1 p-4">
             {messages.length === 0 ? (
               <div className="flex items-center justify-center h-full">
-                <p className="text-gray-500">No messages yet</p>
+                <p className="text-gray-400">No messages yet</p>
               </div>
             ) :
               messages.map((message, index) => (
                 <div key={`index-${index}`} className={`flex ${message.sender === user?.id ? 'justify-end' : 'justify-start'} mb-4`}>
-                  <Card className={`max-w-[70%] ${message.sender === user?.id ? 'bg-primary text-white' : 'bg-white'}`}>
+                  <Card className={`max-w-[70%] ${message.sender === user?.id ? 'bg-primary text-white' : 'bg-gray-800 text-white'}`}>
                     <CardContent className="p-3">
                       <p>{message.content}</p>
-                      <p className={`text-xs mt-1 ${message.sender === user?.id ? 'text-blue-100' : 'text-gray-400'}`}>{message.timestamp}</p>
+                      <p className={`text-xs mt-1 ${message.sender === user?.id ? 'text-blue-200' : 'text-gray-400'}`}>{message.timestamp}</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -175,18 +151,19 @@ export default function ChatPage() {
           </ScrollArea>
 
           {/* Message input */}
-          <div className="bg-white border-t p-4">
+          <div className="bg-gray-800 border-t border-gray-700 p-4">
             <form className="flex space-x-2" onSubmit={(e) => {
               e.preventDefault()
               sendMessage(messageInput)
               setMessageInput('')
-
             }}>
-              <Input className="flex-1 text-primary"
+              <Input 
+                className="flex-1 text-white bg-gray-700 border-gray-600 focus:border-primary"
                 onChange={(e) => setMessageInput(e.target.value)}
                 value={messageInput}
-                placeholder="Type a message..." />
-              <Button type="submit">
+                placeholder="Type a message..." 
+              />
+              <Button type="submit" className="bg-primary hover:bg-primary/80 text-white">
                 <Send className="h-4 w-4" />
               </Button>
             </form>
@@ -194,6 +171,5 @@ export default function ChatPage() {
         </div>
       </div>
     </DashboardLayout>
-
   )
 }

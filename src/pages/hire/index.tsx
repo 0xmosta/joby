@@ -8,25 +8,24 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
-import { Filter } from "lucide-react"
+import { Filter, Loader2 } from "lucide-react"
+import axios from 'axios'
 
 import DashboardLayout from "@/components/Dashboard"
 
-// Placeholder data for developers
-const developers = [
-  { id: 'did:privy:cm1whutm00504114f06sfb7fh', address: "0x46533Ca9Cc95b685880F46596Ad5efE4e036FF90", description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
-  { id: 'did:privy:cm1whutm00504114f06sfb7fh', address: "0x5aFAAb12d773a7AC18211124Ea0771a260376592", description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-  { id: 'did:privy:cm1whutm00504114f06sfb7fh', address: "0xBcCd6818083ce7C3C4Dd03c2f0c464b1594D28fC", description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.' },
-  { id: 'did:privy:cm1whutm00504114f06sfb7fh', address: "0xfDe48dBc67058C6B43cB4FbbB0a0b379239B7A8b", description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
-  { id: 'did:privy:cm1whutm00504114f06sfb7fh', address: "0x7Db54A99dA87C4b80D5E7221F8B0e35Ca8ccEc7d", description: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.' },
-  { id: 'did:privy:cm1whutm00504114f06sfb7fh', address: "0x5F73AB2a86Be254454013cBc62BA4139Abe474C0", description: 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos.' },
-]
+const BACKEND_URL = "https://joby-backend.fly.dev"
 
 export const Hire = () => {
-
   const [showFilters, setShowFilters] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [developers, setDevelopers] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
   const cardRef = useRef(null)
+
+  useEffect(() => {
+    fetchDevelopers()
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,28 +41,54 @@ export const Hire = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const fetchDevelopers = async () => {
+    try {
+      setIsLoading(true)
+      const response = await axios.get(`${BACKEND_URL}/developers/`)
+      setDevelopers(response.data)
+      setIsLoading(false)
+    } catch (err) {
+      console.error('Error fetching developers:', err)
+      setError('Failed to fetch developers. Please try again later.')
+      setIsLoading(false)
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-screen bg-gray-900">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  if (error) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-screen bg-gray-900">
+          <p className="text-red-400">{error}</p>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
   return (
     <DashboardLayout>
-      <div className="flex flex-col bg-white w-full h-full">
-        <div className="fixed top-0 left-0 right-0 z-10 bg-white p-4 shadow-md">
-          <Button
-            onClick={() => setShowFilters(!showFilters)}
-            className="w-full flex items-center justify-center"
-          >
-            <Filter className="mr-2" /> {showFilters ? 'Hide Filters' : 'Show Filters'}
-          </Button>
-        </div>
+      <div className="flex flex-col bg-gray-900 w-full h-full text-white">
+
 
         {showFilters && (
-          <Card className="mt-16 mx-4 mb-4">
+          <Card className="mt-16 mx-4 mb-4 bg-gray-800 border-gray-700">
             <CardContent className="grid gap-4 p-4">
               <div className="grid gap-2">
-                <Label htmlFor="specialty">Specialty</Label>
+                <Label htmlFor="specialty" className="text-gray-300">Specialty</Label>
                 <Select>
-                  <SelectTrigger id="specialty">
+                  <SelectTrigger id="specialty" className="bg-gray-700 border-gray-600 text-white">
                     <SelectValue placeholder="Select specialty" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-gray-700 border-gray-600">
                     <SelectItem value="frontend">Frontend</SelectItem>
                     <SelectItem value="backend">Backend</SelectItem>
                     <SelectItem value="fullstack">Full Stack</SelectItem>
@@ -74,18 +99,18 @@ export const Hire = () => {
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="experience">Minimum Experience (years)</Label>
-                <Input type="number" id="experience" placeholder="0" min="0" />
+                <Label htmlFor="experience" className="text-gray-300">Minimum Experience (years)</Label>
+                <Input type="number" id="experience" placeholder="0" min="0" className="bg-gray-700 border-gray-600 text-white" />
               </div>
               <div className="grid gap-2">
-                <Label>Price Range (per month)</Label>
-                <Slider defaultValue={[0, 10000]} max={10000} step={500} />
+                <Label className="text-gray-300">Price Range (per month)</Label>
+                <Slider defaultValue={[0, 10000]} max={10000} step={500} className="bg-gray-700" />
               </div>
               <div className="grid gap-2">
-                <Label>Minimum Rating</Label>
-                <Slider defaultValue={[0]} max={5} step={0.1} />
+                <Label className="text-gray-300">Minimum Rating</Label>
+                <Slider defaultValue={[0]} max={5} step={0.1} className="bg-gray-700" />
               </div>
-              <Button>Apply Filters</Button>
+              <Button className="bg-primary hover:bg-primary/80">Apply Filters</Button>
             </CardContent>
           </Card>
         )}
@@ -98,14 +123,14 @@ export const Hire = () => {
               ref={index === currentIndex ? cardRef : null}
             >
               <Link href={`/p/${dev.address}`} passHref>
-                <Card className="w-full max-w-sm cursor-pointer transition-transform duration-200 hover:scale-105">
+                <Card className="w-full max-w-sm cursor-pointer transition-transform duration-200 hover:scale-105 bg-gray-800 border-gray-700">
                   <CardHeader className="text-center pb-2">
                     <div className="flex justify-center mb-4">
                       <Avatar style={{ width: '8rem', height: '8rem' }} {...genConfig(dev.address)} />
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p><strong>Summary:</strong> {dev.description}</p>
+                    <p className="text-gray-300"><strong className="text-white">Summary:</strong> {dev.bio}</p>
                   </CardContent>
                 </Card>
               </Link>
