@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
-import { Bell, Settings, LogOut, User } from "lucide-react"
+import { Bell, Settings, LogOut, User, Briefcase } from "lucide-react"
 import { useState } from "react"
 import { usePrivy } from "@privy-io/react-auth"
 import { useRouter } from "next/router"
@@ -53,6 +53,12 @@ const Header = () => {
                   <Link href="/profile" className="flex items-center">
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/hire" className="flex items-center">
+                    <Briefcase className="mr-2 h-4 w-4" />
+                    <span>Hire developers</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>

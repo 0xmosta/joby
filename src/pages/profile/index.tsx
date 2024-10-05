@@ -40,7 +40,7 @@ export default function UserProfilePage() {
             <Tabs defaultValue="personal" className="w-full">
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="personal"><User className="mr-2 h-4 w-4" /> Personal</TabsTrigger>
-                <TabsTrigger value="account"><Key className="mr-2 h-4 w-4" /> Wallet</TabsTrigger>
+                <TabsTrigger value="wallet"><Key className="mr-2 h-4 w-4" /> Wallet</TabsTrigger>
                 <TabsTrigger value="notifications"><Bell className="mr-2 h-4 w-4" /> Notifications</TabsTrigger>
                 <TabsTrigger value="privacy"><Shield className="mr-2 h-4 w-4" /> Privacy</TabsTrigger>
               </TabsList>
@@ -48,7 +48,7 @@ export default function UserProfilePage() {
                 <form className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>
-                    <Input id="name" value={name} onChange={(e) => useUserStore.setState({ username: e.target.value })} />
+                    <Input id="name" value={user?.github?.username || ''} onChange={(e) => useUserStore.setState({ username: e.target.value })} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
@@ -61,22 +61,15 @@ export default function UserProfilePage() {
                   <Button type="submit">Save Changes</Button>
                 </form>
               </TabsContent>
-              <TabsContent value="account">
+              <TabsContent value="wallet">
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Account Settings</h3>
-                  <div className="space-y-2">
-                    <Label htmlFor="current-password">Current Password</Label>
-                    <Input id="current-password" type="password" />
+                  <h3 className="text-lg font-medium">Manage your wallet settings</h3>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="wallet-address">Wallet Address</Label>
+                    <Label htmlFor="wallet-address">{user?.wallet?.address}</Label>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="new-password">New Password</Label>
-                    <Input id="new-password" type="password" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="confirm-password">Confirm New Password</Label>
-                    <Input id="confirm-password" type="password" />
-                  </div>
-                  <Button>Change Password</Button>
+
+
                 </div>
               </TabsContent>
               <TabsContent value="notifications">
