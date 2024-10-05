@@ -9,18 +9,19 @@ import { Input } from "@/components/ui/input"
 import { usePrivy } from "@privy-io/react-auth"
 import { TransitiveTrustGraph } from "@ethereum-attestation-service/transitive-trust-sdk"
 import axios from 'axios'
+import DashboardLayout from '@/components/Dashboard'
 
 interface Edge {
-  id: string;
-  src: string;
-  dst: string;
-  score: number;
+  id: string
+  src: string
+  dst: string
+  score: number
 }
 
 interface TrustScore {
-  positiveScore: number;
-  negativeScore: number;
-  netScore: number;
+  positiveScore: number
+  negativeScore: number
+  netScore: number
 }
 
 const DeveloperDetailPage = () => {
@@ -53,7 +54,7 @@ const DeveloperDetailPage = () => {
   useEffect(() => {
     if (edges.length > 0) {
       const graph = new TransitiveTrustGraph()
-      
+
       edges.forEach(edge => {
         graph.addEdge(edge.src, edge.dst, edge.score, 0)
       })
@@ -64,7 +65,7 @@ const DeveloperDetailPage = () => {
         scores[sourceNode] = graph.computeTrustScores(sourceNode, nodes)
       })
       setTrustScores(scores)
-      
+
       if (user?.wallet?.address && address && typeof address === 'string') {
         const userScores = scores[user.wallet.address]
         if (userScores && userScores[address]) {
@@ -75,7 +76,7 @@ const DeveloperDetailPage = () => {
   }, [edges, user, address])
 
   const handleBack = () => router.back()
-  
+
   const handleCopyAddress = () => {
     if (address && typeof address === 'string') {
       navigator.clipboard.writeText(address)
@@ -112,7 +113,7 @@ const DeveloperDetailPage = () => {
     }
   }
 
-  const truncateAddress = (addr: string) => 
+  const truncateAddress = (addr: string) =>
     `${addr.slice(0, 6)}...${addr.slice(-4)}`
 
   if (!isClient) {
@@ -120,7 +121,7 @@ const DeveloperDetailPage = () => {
   }
 
   const handleContact = async () => {
-    try { 
+    try {
       const response = await fetch('/api/chat/create-group', {
         method: 'POST',
         body: JSON.stringify({
@@ -137,101 +138,104 @@ const DeveloperDetailPage = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 sm:p-6">
-      <Card className="w-full max-w-xl shadow-lg">
-        <CardHeader className="flex flex-col items-center p-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg">
-          <div className="relative mb-4">
-            {address && typeof address === 'string' && (
-              <Avatar style={{ width: '7rem', height: '7rem' }} {...genConfig(address)} />
-            )}
-            <div className="absolute bottom-1 right-1 bg-white rounded-full p-1">
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+    <DashboardLayout>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 sm:p-6">
+        <Card className="w-full max-w-xl shadow-lg">
+          <CardHeader className="flex flex-col items-center p-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-t-lg">
+            <div className="relative mb-4">
+              {address && typeof address === 'string' && (
+                <Avatar style={{ width: '7rem', height: '7rem' }} {...genConfig(address)} />
+              )}
+              <div className="absolute bottom-1 right-1 bg-white rounded-full p-1">
+                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+              </div>
             </div>
-          </div>
-          <CardTitle className="text-2xl font-bold mb-2 text-center">
-            {address && typeof address === 'string' ? truncateAddress(address) : 'Loading...'}
-          </CardTitle>
-          <CardDescription className="text-gray-200 flex flex-wrap items-center justify-center gap-2">
-            <Button variant="ghost" size="sm" onClick={handleCopyAddress} className="text-gray-200 hover:text-white px-2 py-1">
-              <Copy className="h-4 w-4 mr-1" />
-              Copy address
-            </Button>
-            <span className="hidden sm:inline">|</span>
-            {address && typeof address === 'string' && (
-              <a href={`https://etherscan.io/address/${address}`} target="_blank" rel="noopener noreferrer" 
-                 className="flex items-center hover:text-white text-sm">
-                <ExternalLink className="h-4 w-4 mr-1" />
-                View on Etherscan
-              </a>
-            )}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-6">
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold mb-2">About</h3>
-            <p className="text-gray-600 text-sm">
-              Experienced blockchain developer specializing in Ethereum smart contracts and DeFi applications. 
-            </p>
-          </div>
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold mb-2">Trust Score</h3>
-            <div className="flex items-center mb-3">
-              <Progress value={trustScore} className="flex-grow mr-4" />
-              <span className="text-lg font-bold w-12 text-right">{trustScore}%</span>
+            <CardTitle className="text-2xl font-bold mb-2 text-center">
+              {address && typeof address === 'string' ? truncateAddress(address) : 'Loading...'}
+            </CardTitle>
+            <CardDescription className="text-gray-200 flex flex-wrap items-center justify-center gap-2">
+              <Button variant="ghost" size="sm" onClick={handleCopyAddress} className="text-gray-200 hover:text-white px-2 py-1">
+                <Copy className="h-4 w-4 mr-1" />
+                Copy address
+              </Button>
+              <span className="hidden sm:inline">|</span>
+              {address && typeof address === 'string' && (
+                <a href={`https://etherscan.io/address/${address}`} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center hover:text-white text-sm">
+                  <ExternalLink className="h-4 w-4 mr-1" />
+                  View on Etherscan
+                </a>
+              )}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-2">About</h3>
+              <p className="text-gray-600 text-sm">
+                Experienced blockchain developer specializing in Ethereum smart contracts and DeFi applications.
+              </p>
             </div>
-            <Button onClick={handleOpenModal} className="w-full">
-              <Star className="mr-2 h-4 w-4" /> Rate Developer
-            </Button>
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-2">Trust Score</h3>
+              <div className="flex items-center mb-3">
+                <Progress value={trustScore} className="flex-grow mr-4" />
+                <span className="text-lg font-bold w-12 text-right">{trustScore}%</span>
+              </div>
+              <Button onClick={handleOpenModal} className="w-full">
+                <Star className="mr-2 h-4 w-4" /> Rate Developer
+              </Button>
+            </div>
+            <div className="flex flex-col gap-3">
+              <Button onClick={handleContact} className="w-full">
+                <Mail className="mr-2 h-4 w-4" /> Contact This Person
+              </Button>
+              <Button variant="outline" onClick={handleBack} className="w-full">
+                <ArrowLeft className="mr-2 h-4 w-4" /> Back to List
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+        {showCopiedAlert && (
+          <div className="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded relative text-sm" role="alert">
+            <span>Address copied to clipboard!</span>
           </div>
-          <div className="flex flex-col gap-3">
-            <Button onClick={handleContact} className="w-full">
-              <Mail className="mr-2 h-4 w-4" /> Contact This Person
-            </Button>
-            <Button variant="outline" onClick={handleBack} className="w-full">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to List
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-      {showCopiedAlert && (
-        <div className="mt-4 bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded relative text-sm" role="alert">
-          <span>Address copied to clipboard!</span>
-        </div>
-      )}
+        )}
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Rate Developer</h2>
-              <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-700">
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-            <p className="mb-4 text-gray-600">
-              Enter a trust score between 0 and 100 for this developer.
-            </p>
-            <Input
-              type="number"
-              min="0"
-              max="100"
-              value={newTrustScore}
-              onChange={(e) => setNewTrustScore(e.target.value)}
-              placeholder="Enter score (0-100)"
-              className="mb-4"
-            />
-            <div className="flex justify-end gap-2">
-              <Button onClick={handleCloseModal} variant="outline">
-                Cancel
-              </Button>
-              <Button onClick={handleTrustScoreSubmit}>
-                Submit
-              </Button>
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold">Rate Developer</h2>
+                <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-700">
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+              <p className="mb-4 text-gray-600">
+                Enter a trust score between 0 and 100 for this developer.
+              </p>
+              <Input
+                type="number"
+                min="0"
+                max="100"
+                value={newTrustScore}
+                onChange={(e) => setNewTrustScore(e.target.value)}
+                placeholder="Enter score (0-100)"
+                className="mb-4"
+              />
+              <div className="flex justify-end gap-2">
+                <Button onClick={handleCloseModal} variant="outline">
+                  Cancel
+                </Button>
+                <Button onClick={handleTrustScoreSubmit}>
+                  Submit
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </DashboardLayout>
+
   )
 }
 

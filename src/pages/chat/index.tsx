@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import Avatar, { genConfig } from 'react-nice-avatar'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Send, Menu } from "lucide-react"
 import DashboardLayout from '@/components/Dashboard'
 import { decodeBytes32String, toBeHex } from 'ethers'
+import { usePrivy } from '@privy-io/react-auth'
 
 type Chat = {
   id: number
@@ -16,6 +17,13 @@ type Chat = {
   lastMessage: string
   timestamp: string
   description: string
+}
+
+type Message = {
+  id: number
+  sender: string
+  content: string
+  timestamp: string
 }
 
 // Placeholder data for chats
@@ -35,6 +43,7 @@ const chats = [
 // ]
 
 export default function ChatPage() {
+  const { user } = usePrivy()
   const [chatList, setChatList] = useState<Chat[]>([])
   const [messageInput, setMessageInput] = useState('')
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null)
@@ -61,13 +70,12 @@ export default function ChatPage() {
 
   const sendMessage = async (message: string) => {
     if (!selectedChat) return
-    console.log(message)
     try {
-      const response = await fetch("api/chat/send", {
+      const response = await fetch("api/chat/send-message", {
         method: "POST",
         body: JSON.stringify({
           groupId: selectedChat.id,
-          message,
+          messageToSend: message,
         })
       })
       const data = await response.json()
@@ -78,6 +86,7 @@ export default function ChatPage() {
   }
 
   useEffect(() => {
+
     const fetchMessage = async () => {
       if (selectedChat) {
         try {
@@ -92,6 +101,8 @@ export default function ChatPage() {
             timestamp: message.timestamp,
           }))
           setMessages(messagesArray)
+
+          console.log(messagesArray);
         } catch (error) {
           console.error(`error`, error)
         }
@@ -127,7 +138,7 @@ export default function ChatPage() {
                     <p className="text-sm font-medium text-gray-900 truncate">{chat.name}</p>
                     <p className="text-sm text-gray-500 truncate">{chat.description}</p>
                   </div>
-                  {/* <span className="text-xs text-gray-400">{chat.timestamp}</span> */}
+                  <span className="text-xs text-gray-400">{chat.timestamp}</span>
                 </div>
               </div>
             ))}
@@ -152,11 +163,11 @@ export default function ChatPage() {
               </div>
             ) :
               messages.map((message, index) => (
-                <div key={`index-${index}`} className={`flex ${message.sender === 'You' ? 'justify-end' : 'justify-start'} mb-4`}>
-                  <Card className={`max-w-[70%] ${message.sender === 'You' ? 'bg-primary text-white' : 'bg-white'}`}>
+                <div key={`index-${index}`} className={`flex ${message.sender === user?.id ? 'justify-end' : 'justify-start'} mb-4`}>
+                  <Card className={`max-w-[70%] ${message.sender === user?.id ? 'bg-primary text-white' : 'bg-white'}`}>
                     <CardContent className="p-3">
                       <p>{message.content}</p>
-                      <p className={`text-xs mt-1 ${message.sender === 'You' ? 'text-blue-100' : 'text-gray-400'}`}>{message.timestamp}</p>
+                      <p className={`text-xs mt-1 ${message.sender === user?.id ? 'text-blue-100' : 'text-gray-400'}`}>{message.timestamp}</p>
                     </CardContent>
                   </Card>
                 </div>
