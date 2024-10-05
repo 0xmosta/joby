@@ -6,14 +6,17 @@ import { Loader2 } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from './ui/button'
 import { useRouter } from 'next/router'
+import { usePrivy } from '@privy-io/react-auth'
 
 export default function OnboardDev1() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
   const [showDescription, setShowDescription] = useState(false)
-
+  const [userDescription, setUserDescription] = useState([])
+  const { user } = usePrivy()
   useEffect(() => {
     // Simulate loading time
+    getUserDescription()
     const timer = setTimeout(() => {
       setIsLoading(false)
     }, 3000)
@@ -32,13 +35,26 @@ export default function OnboardDev1() {
     }
   }, [isLoading])
 
-  const userDescription = [
-    "Name: John Doe",
-    "Age: 30",
-    "Occupation: Software Developer",
-    "Hobbies: Coding, Reading, Hiking",
-    "Favorite Quote: 'The only way to do great work is to love what you do.'"
-  ]
+  const getUserDescription = async () => {
+    const githubUsername = user?.github?.username
+    if (!githubUsername) {
+      setIsLoading(false)
+      throw new Error('GitHub username not found')
+    }
+    try {
+      const response = await fetch(`https://joby-backend.fly.dev/${githubUsername}`)
+      const data = await response.json()
+      setUserDescription(data)
+      setShowDescription(true)
+      setIsLoading(false)
+      console.log(data);
+    } catch (error) {
+      setShowDescription(true)
+      setIsLoading(false)
+      console.error('Error fetching user description:', error)
+    }
+    
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col gap-2 items-center justify-center p-4">

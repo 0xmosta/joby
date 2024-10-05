@@ -1,5 +1,5 @@
 "use client"
-
+import Avatar, { genConfig } from 'react-nice-avatar'
 import { useState } from 'react'
 import Image from 'next/image'
 import { Button } from "@/components/ui/button"
@@ -11,15 +11,15 @@ import { Slider } from "@/components/ui/slider"
 import { Star, Filter } from "lucide-react"
 
 import DashboardLayout from "@/components/Dashboard"
-
+const config = genConfig("hi@dapi.to")
 // Placeholder data for developers
 const developers = [
-  { id: 1, name: "Alice Johnson", specialty: "Frontend", experience: 5, rating: 4.8, price: 5000 },
-  { id: 2, name: "Bob Smith", specialty: "Backend", experience: 8, rating: 4.9, price: 7000 },
-  { id: 3, name: "Charlie Brown", specialty: "Full Stack", experience: 6, rating: 4.7, price: 6000 },
-  { id: 4, name: "Diana Ross", specialty: "Mobile", experience: 4, rating: 4.6, price: 4500 },
-  { id: 5, name: "Ethan Hunt", specialty: "DevOps", experience: 7, rating: 4.8, price: 6500 },
-  { id: 6, name: "Fiona Apple", specialty: "UI/UX", experience: 5, rating: 4.7, price: 5500 },
+  { id: 1, name: "0x46533Ca9Cc95b685880F46596Ad5efE4e036FF90", specialty: "Frontend", experience: 5, description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
+  { id: 2, name: "0x5aFAAb12d773a7AC18211124Ea0771a260376592", specialty: "Backend", experience: 8, description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
+  { id: 3, name: "0xBcCd6818083ce7C3C4Dd03c2f0c464b1594D28fC", specialty: "Full Stack", experience: 6, description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
+  { id: 4, name: "0xfDe48dBc67058C6B43cB4FbbB0a0b379239B7A8b", specialty: "Mobile", experience: 4, description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
+  { id: 5, name: "0x7Db54A99dA87C4b80D5E7221F8B0e35Ca8ccEc7d", specialty: "DevOps", experience: 7, description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
+  { id: 6, name: "0x5F73AB2a86Be254454013cBc62BA4139Abe474C0", specialty: "UI/UX", experience: 5, description: 'lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
 ]
 export const Hire = () => {
   const [showFilters, setShowFilters] = useState(false)
@@ -78,21 +78,22 @@ export const Hire = () => {
               <Card key={dev.id} className="overflow-hidden">
                 <CardHeader className="text-center pb-2">
                   <div className="flex justify-center mb-4">
-                    <Image
+                    <Avatar style={{ width: '8rem', height: '8rem' }} {...genConfig(dev.name)} />
+                    {/* <Image
                       src={`/placeholder.svg?height=100&width=100`}
                       alt={`${dev.name}'s profile`}
                       width={100}
                       height={100}
                       className="rounded-full object-cover"
-                    />
+                    /> */}
                   </div>
-                  <CardTitle>{dev.name}</CardTitle>
+                  <CardTitle className='truncate'>{dev.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p><strong>Specialty:</strong> {dev.specialty}</p>
                   <p><strong>Experience:</strong> {dev.experience} years</p>
-                  <p><strong>Rating:</strong> {dev.rating} <Star className="inline-block w-4 h-4 fill-yellow-400 stroke-yellow-400" /></p>
-                  <p><strong>Avg. Price/Month:</strong> ${dev.price}</p>
+                  <p><strong>Description:</strong> {dev.description}</p>
+
                 </CardContent>
               </Card>
             ))}

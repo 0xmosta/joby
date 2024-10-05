@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import useUserStore from "@/hooks/useUserStore"
 import { usePrivy } from "@privy-io/react-auth"
 import { EyeOff, Search, Shield } from "lucide-react"
 import Image from "next/image"
@@ -15,15 +14,17 @@ export default function JobyLanding() {
     login({ loginMethods: ['github', 'wallet'] })
   }
 
-  useEffect(() => {
+  const setUserInfo = async () => {
     if (ready && authenticated) {
       console.log('authenticated')
-      if (user?.github?.name) {
-        useUserStore.setState({ username: user.github.username })
-      }
+      const response = await fetch('/api/auth/user-info')
+      console.log(response);
       router.push('/onboarding')
-
     }
+  }
+
+  useEffect(() => {
+    setUserInfo()
   }, [authenticated])
 
   return (

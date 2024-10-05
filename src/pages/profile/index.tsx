@@ -19,7 +19,7 @@ export default function UserProfilePage() {
   const name = useUserStore((state) => state.username || 'John Doe')
   const [email, setEmail] = useState(user?.github?.email || 'johndoe@example.com')
   const [bio, setBio] = useState("I'm a software developer passionate about creating user-friendly applications.")
-
+  console.log(user);
   return (
     <DashboardLayout>
       <div className="flex flex-col bg-white w-full h-screen py-20 items-center gap-2 p-2">
