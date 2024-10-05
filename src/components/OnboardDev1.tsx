@@ -12,16 +12,11 @@ export default function OnboardDev1() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
   const [showDescription, setShowDescription] = useState(false)
-  const [userDescription, setUserDescription] = useState([])
+  const [userDescription, setUserDescription] = useState<string[]>([])
   const { user } = usePrivy()
   useEffect(() => {
     // Simulate loading time
     getUserDescription()
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
-
-    return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
@@ -44,16 +39,16 @@ export default function OnboardDev1() {
     try {
       const response = await fetch(`https://joby-backend.fly.dev/${githubUsername}`)
       const data = await response.json()
-      setUserDescription(data)
-      setShowDescription(true)
+      const summary = data.summary as string
+      const summaryArray = summary.split('\n').filter(line => line.trim() !== '')
+      setUserDescription(summaryArray)
       setIsLoading(false)
-      console.log(data);
+      console.log(data)
     } catch (error) {
-      setShowDescription(true)
       setIsLoading(false)
       console.error('Error fetching user description:', error)
     }
-    
+
   }
 
   return (

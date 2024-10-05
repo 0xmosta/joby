@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -8,28 +8,26 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { User, Bell, Shield, Key } from 'lucide-react'
 import { usePrivy } from '@privy-io/react-auth'
 import DashboardLayout from '@/components/Dashboard'
 import useUserStore from '@/hooks/useUserStore'
+import Avatar, { genConfig } from 'react-nice-avatar'
+import Image from 'next/image'
 
 export default function UserProfilePage() {
   const { user } = usePrivy()
-  const name = useUserStore((state) => state.username || 'John Doe')
-  const [email, setEmail] = useState(user?.github?.email || 'johndoe@example.com')
+  const [email, setEmail] = useState<string>('test@example.com')
   const [bio, setBio] = useState("I'm a software developer passionate about creating user-friendly applications.")
-  console.log(user);
+
   return (
     <DashboardLayout>
       <div className="flex flex-col bg-white w-full h-screen py-20 items-center gap-2 p-2">
         <Card className="max-w-3xl mx-auto">
           <CardHeader>
             <div className="flex items-center space-x-4">
-              <Avatar className="w-20 h-20">
-                <AvatarImage src="/rick.jpeg" alt={name} />
-                <AvatarFallback>{name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-              </Avatar>
+              <Avatar className='w-20 h-20' {...genConfig(user?.wallet?.address || '')} />
+
               <div>
                 <CardTitle className="text-2xl">{user?.github?.username}</CardTitle>
                 <CardDescription>{user?.wallet?.address}</CardDescription>
@@ -91,18 +89,37 @@ export default function UserProfilePage() {
               </TabsContent>
               <TabsContent value="privacy">
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Privacy Settings</h3>
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="profile-visibility">Profile Visibility</Label>
-                    <Switch id="profile-visibility" />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="search-visibility">Appear in Search Results</Label>
-                    <Switch id="search-visibility" />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="activity-visibility">Show Activity Status</Label>
-                    <Switch id="activity-visibility" />
+                  <h3 className="text-lg font-medium">Here you could verify your skills without exposing your identity</h3>
+                  <div className="flex flex-col gap-6 justify-center items-center p-4">
+                    <Card className="w-full h-32 flex flex-col items-center justify-center p-4 bg-white transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-2">
+                      <CardContent className="flex flex-col items-center text-center">
+                        <Image
+                          src="/brilliantlogo.png"
+                          alt="Brilliant logo"
+                          width={98}
+                          height={98}
+                          className="mb-4"
+                        />
+                        <p className="text-sm">
+                          Verify your skills on Brilliant using ZkPass
+                        </p>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="w-full h-32 flex flex-col items-center justify-center p-4 bg-white transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-2">
+                      <CardContent className="flex flex-col items-center text-center">
+                        <Image
+                          src="/githublogo.png"
+                          alt="GitHub logo"
+                          width={128}
+                          height={128}
+                          className="mb-4"
+                        />
+                        <p className="text-sm">
+                          Verify your skills on GitHub using ZkPass
+                        </p>
+                      </CardContent>
+                    </Card>
                   </div>
                 </div>
               </TabsContent>

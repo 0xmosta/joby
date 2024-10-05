@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -15,11 +14,12 @@ import { Bell, Settings, LogOut, User, Briefcase } from "lucide-react"
 import { useState } from "react"
 import { usePrivy } from "@privy-io/react-auth"
 import { useRouter } from "next/router"
+import Avatar, { genConfig } from "react-nice-avatar"
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
-  const { logout } = usePrivy()
+  const { logout, user } = usePrivy()
 
   const handleLogout = async () => {
     await logout()
@@ -39,13 +39,11 @@ const Header = () => {
             <Button variant="ghost" size="icon" className="mr-4 text-primary" aria-label="Notifications">
               <Bell className="h-5 w-5" />
             </Button>
+
             <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="text-primary relative h-8 w-8 rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="/rick.jpeg" alt="User avatar" />
-                    <AvatarFallback>JD</AvatarFallback>
-                  </Avatar>
+                  <Avatar className="absolute w-8 h-8" {...genConfig(user?.wallet?.address || 'test')} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
