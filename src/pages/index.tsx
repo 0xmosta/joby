@@ -31,9 +31,7 @@ export default function JobyLanding() {
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <header className="px-4 lg:px-6 h-16 flex items-center justify-between max-w-7xl mx-auto w-full">
         <Link className="flex items-center justify-center" href="/">
-          <span className="sr-only">Joby</span>
           <Image src={'/JobyLogo2.png'} alt="Joby Logo" width={60} height={60} />
-          <span className="ml-2 text-2xl font-bold text-primary">Joby</span>
         </Link>
         <nav className="flex gap-4 sm:gap-6">
           <Button onClick={onClickLogin} variant="outline" className="font-semibold text-white border-white hover:bg-gray-800">Log In</Button>

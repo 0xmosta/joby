@@ -10,7 +10,7 @@ export default function CardSelectionPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-900">
+    <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gray-900">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
         <Card 
           className="cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1 bg-gray-800 border-gray-700"
