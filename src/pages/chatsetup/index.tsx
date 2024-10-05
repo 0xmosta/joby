@@ -5,15 +5,10 @@ import {
   decodeBytes32String,
   toBeHex
 } from "ethers"
-
 import { ApiSdk } from "@bandada/api-sdk"
 import { Invite } from "@bandada/api-sdk"
-
-import { Identity, Group, generateProof } from "@semaphore-protocol/core"
-
+import { Identity, Group } from "@semaphore-protocol/core"
 import { useState } from "react"
-import { getGroup, getMembersGroup } from "@/lib/bandadaUtils"
-
 
 export default function ChatSetup() {
   const { user } = usePrivy()

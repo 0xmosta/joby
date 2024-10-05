@@ -21,8 +21,7 @@ export default async function handler(
     return res.status(405).json({ message: 'Method Not Allowed' })
   }
 
-  const { name, description } =
-    req.body
+  const { name, description, personToContact } = JSON.parse(req.body)
 
   try {
     const userData = await verifyToken(req)
@@ -34,15 +33,18 @@ export default async function handler(
     const identity = new Identity(identityPK)
 
     const group = await bandada.createGroup({
-      name,
+      name: name.slice(0, 10) as string,
       description,
       fingerprintDuration: 3600,
       treeDepth: 16,
     }, API_KEY)
-
-
-    await bandada.addMemberByApiKey(group.id, identity.commitment as any, API_KEY)
-
+    console.log('new group', group)
+    try {
+      await bandada.addMemberByApiKey(group.id, identity.commitment as any, API_KEY)
+    } catch (error) {
+      console.error("Error adding member:", error)
+      console.error(error)
+    }
     const groupRoot = await getRoot(group.members)
 
     const client = await clientPromise
@@ -55,17 +57,33 @@ export default async function handler(
       root: groupRoot.toString()
     })
 
+    const otherUser = await privyClient.getUserById(personToContact)
+    const otherIdentityPK = otherUser.customMetadata.identity as string
+    if (!otherIdentityPK) {
+      return res.status(401).json({ message: 'otherUser identity not found' })
+    }
+    const otherIdentity = new Identity(otherIdentityPK)
+    await bandada.addMemberByApiKey(group.id, otherIdentity.commitment as any, API_KEY)
+    const otherGroupRoot = await getRoot(group.members)
+
+    await rootCollection.insertOne({
+      _id: new ObjectId(),
+      createdAt: new Date().toISOString(),
+      root: otherGroupRoot.toString()
+    })
+
     const groupsCollection = db.collection('groups')
     await groupsCollection.insertOne({
       _id: new ObjectId(),
       id: group.id,
       name: name,
+      root: otherGroupRoot
     })
 
 
     res.status(200).json({ message: 'Success' })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     res.status(401).json({ message: 'Unauthorized' })
   }
 }

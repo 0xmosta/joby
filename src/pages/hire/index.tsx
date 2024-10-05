@@ -14,15 +14,16 @@ import DashboardLayout from "@/components/Dashboard"
 
 // Placeholder data for developers
 const developers = [
-  { address: "0x46533Ca9Cc95b685880F46596Ad5efE4e036FF90", description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
-  { address: "0x5aFAAb12d773a7AC18211124Ea0771a260376592", description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-  { address: "0xBcCd6818083ce7C3C4Dd03c2f0c464b1594D28fC", description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.' },
-  { address: "0xfDe48dBc67058C6B43cB4FbbB0a0b379239B7A8b", description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
-  { address: "0x7Db54A99dA87C4b80D5E7221F8B0e35Ca8ccEc7d", description: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.' },
-  { address: "0x5F73AB2a86Be254454013cBc62BA4139Abe474C0", description: 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos.' },
+  { id: 'did:privy:cm1whutm00504114f06sfb7fh', address: "0x46533Ca9Cc95b685880F46596Ad5efE4e036FF90", description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
+  { id: 'did:privy:cm1whutm00504114f06sfb7fh', address: "0x5aFAAb12d773a7AC18211124Ea0771a260376592", description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
+  { id: 'did:privy:cm1whutm00504114f06sfb7fh', address: "0xBcCd6818083ce7C3C4Dd03c2f0c464b1594D28fC", description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.' },
+  { id: 'did:privy:cm1whutm00504114f06sfb7fh', address: "0xfDe48dBc67058C6B43cB4FbbB0a0b379239B7A8b", description: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
+  { id: 'did:privy:cm1whutm00504114f06sfb7fh', address: "0x7Db54A99dA87C4b80D5E7221F8B0e35Ca8ccEc7d", description: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.' },
+  { id: 'did:privy:cm1whutm00504114f06sfb7fh', address: "0x5F73AB2a86Be254454013cBc62BA4139Abe474C0", description: 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos.' },
 ]
 
 export const Hire = () => {
+
   const [showFilters, setShowFilters] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const cardRef = useRef(null)

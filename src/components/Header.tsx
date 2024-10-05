@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
-import { Bell, Settings, LogOut, User, Briefcase } from "lucide-react"
+import { Bell, Settings, LogOut, User, Briefcase, MessageCircle } from "lucide-react"
 import { useState } from "react"
 import { usePrivy } from "@privy-io/react-auth"
 import { useRouter } from "next/router"
@@ -60,9 +60,9 @@ const Header = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/settings" className="flex items-center">
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
+                  <Link href="/chat" className="flex items-center">
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    <span>Chat</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

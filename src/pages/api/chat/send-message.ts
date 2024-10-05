@@ -20,7 +20,7 @@ export default async function handler(
   }
 
   // Extract feedback, merkleTreeRoot, nullifierHash, and proof from the request body.
-  const { messageToSend } = req.body
+  const { messageToSend, groupId } = req.body
 
   const userData = await verifyToken(req)
   const user = await privyClient.getUserById(userData.userId)
