@@ -75,7 +75,6 @@ const DeveloperDetailPage = () => {
   }, [edges, user, address])
 
   const handleBack = () => router.back()
-  const handleContact = () => console.log('Contacting developer:', address)
   
   const handleCopyAddress = () => {
     if (address && typeof address === 'string') {
@@ -118,6 +117,23 @@ const DeveloperDetailPage = () => {
 
   if (!isClient) {
     return null // or a loading spinner
+  }
+
+  const handleContact = async () => {
+    try { 
+      const response = await fetch('/api/chat/create-group', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: address,
+          description: 'chat with a potential hire',
+          personToContact: 'did:privy:cm1whutm00504114f06sfb7fh',
+        })
+      })
+
+      router.push('/chat')
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
