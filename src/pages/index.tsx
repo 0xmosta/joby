@@ -17,9 +17,10 @@ export default function JobyLanding() {
   useEffect(() => {
     if (ready && authenticated) {
       console.log('authenticated')
-      router.push('/profile')
+      router.push('/onboarding')
     }
   }, [authenticated])
+  
   return (
     <div className="flex flex-col min-h-screen">
       <header className="px-4 lg:px-6 h-14 flex items-center justify-between max-w-7xl mx-auto w-full">

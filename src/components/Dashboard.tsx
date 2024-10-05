@@ -5,7 +5,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div>
       <Header />
       <main>{children}</main>
-      <footer>Dashboard Footer</footer>
     </div>
   )
 }
