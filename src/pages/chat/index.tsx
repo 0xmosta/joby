@@ -138,7 +138,7 @@ export default function ChatPage() {
                     <p className="text-sm font-medium text-gray-900 truncate">{chat.name}</p>
                     <p className="text-sm text-gray-500 truncate">{chat.description}</p>
                   </div>
-                  <span className="text-xs text-gray-400">{chat.timestamp}</span>
+                  {/* <span className="text-xs text-gray-400">{chat.timestamp}</span> */}
                 </div>
               </div>
             ))}

@@ -31,7 +31,7 @@ export const Hire = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (cardRef.current) {
-        const cardHeight = cardRef.current.offsetHeight
+        const cardHeight = cardRef.current['offsetHeight'] 
         const scrollPosition = window.scrollY
         const newIndex = Math.round(scrollPosition / cardHeight)
         setCurrentIndex(newIndex)

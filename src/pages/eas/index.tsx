@@ -34,7 +34,7 @@ const EASIndexPage = () => {
       setError(null);
     } catch (err) {
       console.error('Error fetching edges:', err);
-      setError(err.message || 'An error occurred while fetching data');
+      setError(err instanceof Error ? err.message : 'An error occurred while fetching data');
       
       if (axios.isAxiosError(err)) {
         if (err.response) {
@@ -49,7 +49,6 @@ const EASIndexPage = () => {
       }
     }
   };
-
   useEffect(() => {
     fetchEdges();
   }, []);
