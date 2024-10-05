@@ -59,7 +59,7 @@ export default function JobyLanding() {
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-800">
           <div className="container px-4 md:px-6 max-w-7xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12">Why Choose Joby?</h2>
-            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-6">
+            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
               <div className="flex flex-col items-center space-y-4 text-center">
                 <EyeOff className="h-12 w-12 text-primary" />
                 <h3 className="text-xl font-bold text-primary">Anonymous Profile</h3>
