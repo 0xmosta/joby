@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
-import { Bell, Settings, LogOut, User, Briefcase, MessageCircle } from "lucide-react"
+import { Bell, Settings, LogOut, User, Briefcase, MessageCircle, Wallet } from "lucide-react"
 import { useState } from "react"
 import { usePrivy } from "@privy-io/react-auth"
 import { useRouter } from "next/router"
@@ -47,6 +47,10 @@ const Header = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuItem>
+                  <Wallet className="mr-2 h-4 w-4" />
+                  <span>{user?.wallet?.address.slice(0, 20)}...</span>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/profile" className="flex items-center">
                     <User className="mr-2 h-4 w-4" />

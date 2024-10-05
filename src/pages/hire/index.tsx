@@ -130,7 +130,8 @@ export const Hire = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-300"><strong className="text-white">Summary:</strong> {dev.bio}</p>
+                    <h1 className='text-white text-center font-bold pb-2 text-xl'>{dev.address.slice(0,10)}</h1>
+                    <p className="text-gray-300 line-clamp-[10]"><strong className="text-white">Summary:</strong> {dev.bio}</p>
                   </CardContent>
                 </Card>
               </Link>
